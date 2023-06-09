@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\QuestionModel;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -12,7 +12,16 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = Question::all();
+        return view('questions.index', compact('questions'));
+    }
+
+    /**
+     * Create a resource in storage.
+     */
+    public function create()
+    {
+        return view('question.create');
     }
 
     /**
@@ -20,30 +29,40 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        QuestionController::create($request->validated());
+        return redirect()->routes('question.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(QuestionModel $questionModel)
+    public function show(Question $question)
     {
-        //
+        return view('question.show', compact('question'));
+    }
+
+    /**
+     * Edit the specified resource in storage.
+     */
+    public function edit(Request $request, Question $question)
+    {
+        return view('question.edit', compact('question'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, QuestionModel $questionModel)
+    public function update(Request $request, Question $question)
     {
-        //
+        $question->update($request->validated());
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(QuestionModel $questionModel)
+    public function destroy(Question $question)
     {
-        //
+        $question->delete();
+        return redirect()->route('question.index');
     }
 }
